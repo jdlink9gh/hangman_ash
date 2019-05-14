@@ -1,60 +1,73 @@
-# hangman_jon
-For this exercise, we wil be using, github, markdown and python to create a hangman game.
-### Steps
-Here are the steps you will need to follow:
-1) Create a new branch off of the 'development' branch of your repository.
-2) Create your hangman game using a class called 'Hangman'
-    - This class may have many member variables and functions to accomplish your task 
-3) Define a "main" function to drive your game
-4) Call main by using the the code:
-```
-if __name__ == "__main__":
-    main()
-```
-5) Create a readme file using markdown to describe how your game works
-    - include a description of your code
-    - include any inputs or outputs you may use along with their descriptions
-    - include a description of how to operate/call your game
-6) Please add and commit your code (using the -m flag to provide a description) periodically to keep track of your 
-status. Please push your code at milestones. You can push multiple commits at the same time.
-7) Once your code is ready for review, please initiate a merge request of your branch back into development. Assign Jack
-Linkous (jdlink9gh) as the reviewer.
+# hangman_ash
+###Game description: 
+This is a program runs the hangman game from command prompt. 
+Program chooses a random word from a text stored locally, if file not 
+found locally it downloads it from web into a specific directory. 
+Program then randomly selected a word which is greater in size then 
+the minimum value users enters to start the program.
+#####Then the game begins...
+####To start the game:
+<ol>
+<li>First open command line
+<li>Go to the directory where program is located
+<li>Type in the following:
 
-### Inputs and Outputs
-#### Inputs
-- The function should take in a parameter from the command line using the 'argparse' module
-- This input should be the minimum length of word you would like to guess during your game
-- Please use a description to provide the user general information on you program as well as the help variable on your 
- arguments to provide info on the particular flags. This information will be displayed if the user uses the '-h' flag.
-#### Outputs
-- The only output to this program will be if there is no locally stored word file. we will discuss how this word file is 
-obtained below, but if the file does not exists please have your code create a folder called 'word_data' and store the
-file as words.txt.
-- Be sure this file is not uploaded to the git repo, as we do not want to add anything to our repo besides code.
-### Hangman
-- This code will operate a game of hangman.
-- The code will first check to see if a file is stored locally and open it.
-- If not it will go up to http://norvig.com/ngrams/sowpods.txt and download the data.
-- You code should then parse this data into a list and store the data in the aforementioned location.
-- The program will then choose a word at random that is at least as long as the minimum length specified by the input 
-argument.
-- The code will loop until the word is either guessed correctly or the player has run of body parts.
-- The loop will display:
-    - The current state of the hangman
-    - The current state of the word, with '_' used as unguessed letters
-    - The letters available to choose
-    - Ask the user to choose a letter
-    - Notify the user if the letter is in the word, if it is not in the word, if the user has already guessed the
-    letter, if the input is more than one character, or if the chosen value is not a letter
-    - If the letter is wrong, or it has already been guessed, update the hangman, and restart the loop
-    - If the value is not a letter, or if the value is more than one character, do not penalize the user, but restart the loop
-    - If the letter is correct, update the guess and restart the loop 
-- A full hangman (a loss) will display as (use this as a guide):
 ```
-|‾‾‾‾‾‾‾|
-|       O
-|      /|\
-|      / \
-|
+python hang_man.py -m (minimum length of word)
 ```
-- Upon the end of the game, notify the user what the word was and tell them whether they won or lost
+<li>Program then displays the mystery word status by displaying __ 
+
+```
+ _  _  _  _  _  _  _  _
+```
+<li>Program also gives option of character to choose from and update list
+
+```
+ _  _  T  T _ I _ _  
+Pick from these letters: A B C D E F G H ~~ J K L M O P Q R S ~~ U V W X Y Z
+Guess a letter:
+```
+<li>Program will output an error message in the input is not one character only
+
+```
+Please enter a string character
+```
+<li>Program will keep running until user looses or wins
+
+```
+
+            |‾‾‾‾‾‾‾|
+            |       O
+            |      /|\
+            |      / \
+            |
+
+Sorry you loose, the correct word was: JUTTYING
+```
+
+
+###Code description 
+This program has 5 methods:
+<ol>
+<li><b>__init__(self, min_limit)</b>: Initializes the object and taking minimum word limit as argument.
+<li><b> access_doc(self)</b>: In this method program searches to see if it can find the word doc locally if not it downloads it from a URL and stores in a predefined location. 
+<li><b>assign_word(self)</b>: This method takes in the word doc from previous method and assigns a andom word that is greater than or equal to min length.
+<li><b>hangman_game(self)</b>: This method starts the game, where it taken in guess input from user, validates and execute game functions.
+<li><b>main()</b>: Driver function that calls the initializes the class.
+
+
+####Code Inputs
+The program takes in:
+<ol>
+<li> A string character 
+</ol>
+
+####Code Outputs
+The program outputs:
+<ol>
+<li> Error message if string input fails validation
+<li> Hangman status
+<li> Word status by displaying blank lines 
+<li> Character users can choose from
+<li> If user won and lost
+
