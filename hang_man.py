@@ -14,105 +14,95 @@ class Hangman:
         self.word_list = []  # A list that stores all the word from local file or web
         self.right_list = []  # A list that stores the right word
         self.guess_letter = str  # User input of their guessed character
-        self.hang_list = [       # A list that contains all the stages of hangman
-            """
-            |‾‾‾‾‾‾‾‾|
-            |       
-            |      
-            |      
-            |
-            """,
-            """
-            |‾‾‾‾‾‾‾|
-            |       O
-            |   
-            |   
-            |
-            """,
-            """
-            |‾‾‾‾‾‾‾|
-            |       O
-            |      /
-            |   
-            |
-            """,
-            """
-            |‾‾‾‾‾‾‾|
-            |       O
-            |      /|
-            |   
-            |
-            """,
-            """
-            |‾‾‾‾‾‾‾|
-            |       O
-            |      /|\\
-            |   
-            |
-            """,
-            """
-            |‾‾‾‾‾‾‾|
-            |       O
-            |      /|\\
-            |      / 
-            |
-            """,
-            """
-            |‾‾‾‾‾‾‾|
-            |       O
-            |      /|\\
-            |      / \\
-            |
-            """]
 
     def access_doc(self):
+        file_loc = './word_data/words.txt'
+        file_dir = './word_data/'
         url = 'http://norvig.com/ngrams/sowpods.txt'  # Create a variable that stores for URL for text file
-        file_exist = os.path.exists('./word_data/words.txt')  # Boolean value to check if text file exist first
+        file_exist = os.path.exists(file_loc)  # Boolean value to check if text file exist first
         if not file_exist:  # If text file does not exist following happens:
-            folder_exist = os.path.isdir('./word_data/')  # Checks to see if directory exists
+            folder_exist = os.path.isdir(file_dir)  # Checks to see if directory exists
             if not folder_exist:  # If directory does not exist following happens:
-                os.mkdir('./word_data/')  # Creates the directory
-                word_file = urllib.request.urlretrieve(url, './word_data/words.txt')  # Download word file into dir
+                os.mkdir(file_dir)  # Creates the directory
+                word_file = urllib.request.urlretrieve(url, file_loc)  # Download word file into dir
                 return os.path.relpath(word_file[0])  # Returns path
             else:  # if dir already exists
-                word_file = urllib.request.urlretrieve(url, './word_data/words.txt')  # Download word file into dir
+                word_file = urllib.request.urlretrieve(url, file_loc)  # Download word file into dir
                 return os.path.relpath(word_file[0])  # Returns path
         else:
-            return os.path.relpath('./word_data/words.txt')  # Returns path if file already exists
+            return os.path.relpath(file_loc)  # Returns path if file already exists
 
     def assign_word(self):
-        empty_list = []
         text_file = self.access_doc()           # Getting text file location from previous method
         with open(text_file) as file:           # Opening text file
             self.word_list = file.read().splitlines()       # Reading text files and splitting word
-            for word in self.word_list:         # Loop to iterate through all the words in file
-                if len(word) >= self.min_limit:         # Finding all words that are greater than or equal to min limit
-                    empty_list.append(word)         # All the words are being added to empty list
-                    right_word = random.choice(empty_list)      # From that list program randomly selects a random word
+            self.word_list = [word for word in self.word_list if len(word) >= self.min_limit]
+            right_word = random.choice(self.word_list)      # From that list program randomly selects a random word
             return right_word           # Returns the random word
+
+    def hang_display(self, wrong):      # A method that is created to print different stages of hangman
+        base = '|‾‾‾‾‾‾‾‾|'
+        vl = '|'
+        wrong1 = '|        O'
+        wrong2 = '|        |'
+        wrong3 = '|       /|'
+        wrong4 = '|       /|\\'
+        wrong5 = '|       /  '
+        wrong6 = '|       / \\'
+        print(base)
+        if wrong == 0:
+            for i in range(4):
+                print(vl)
+        elif wrong == 1:
+            print(wrong1)
+            for i in range(3):
+                print(vl)
+        elif wrong == 2:
+            print(wrong1)
+            print(wrong2)
+            for i in range(2):
+                print(vl)
+        elif wrong == 3:
+            print(wrong1)
+            print(wrong3)
+            for i in range(2):
+                print(vl)
+        elif wrong == 4:
+            print(wrong1)
+            print(wrong4)
+            for i in range(2):
+                print(vl)
+        elif wrong == 5:
+            print(wrong1)
+            print(wrong4)
+            print(wrong5)
+            print(vl)
+        elif wrong == 6:
+            print(wrong1)
+            print(wrong4)
+            print(wrong6)
+            print(vl)
 
     def hangman_game(self):
         correct_word = self.assign_word()       # Getting the word selected by program from previous method
         self.right_list = list(correct_word)        # Converting the word into a list
         right = 0                       # Counter to keep track of right word guessed
         wrong = 0               # Counter to keep track of wrong word guessed
+        max_wrong = 6           # Maximum wrong limit for a word
         selected = []           # A list that keeps track of all the letter selected by user
-        random_string = ''.join(string.ascii_uppercase)     # Getting characters from A - Z
-        random_list = list(random_string)               # Converting the characters into list
+        random_list = list(''.join(string.ascii_uppercase))     # Getting characters from A - Z
         temp_rlist = copy.deepcopy(random_list)         # making a temporary copy of the characters list
 
         blank_list = ["__"] * len(self.right_list)      # A list is created with __ to show user status of word
 
-        while wrong != 6 and right != len(self.right_list):   # loop that executes until user guess right word/looses
-            print('For testing validation, right word is: ' + correct_word)  # Printing the right word for validation
-            print(self.hang_list[wrong])                            # Print the first stage of hangman
+        while wrong != max_wrong and right != len(self.right_list):   # loop that executes until game ends
+            print('Correct word is: ' + correct_word)  # Printing the right word for validation
+            self.hang_display(wrong)
             print('Pick from these letters: ' + ' '.join(random_list))  # Displays characters A-Z for user to pick from
             print('Current status: ' + ' '.join(blank_list))        # Displays the current status of word by using __
             guess_letter = input('Guess a letter: ').upper()        # Asks the user to input in one character
-            if not guess_letter.isalpha():                    # if the char is not string value it will provide an error
-                print('Please enter a string character')
-            elif len(guess_letter) != 1:            # If user does not input only one char it will provide an error
-                print('Enter one character only')
+            if not guess_letter.isalpha() or len(guess_letter) != 1:    # Provides error if input is invalid
+                print('Invalid input, please enter a letter')
             elif guess_letter not in temp_rlist:      # If the guessed letter is not from A-Z it will provide an error
                 print('PLEASE PICK A CHARACTER FROM THE LIST PROVIDED')
             elif guess_letter in selected:      # If the user input a char they already used it provides an error
@@ -140,8 +130,8 @@ class Hangman:
             print('YOU WON! The correct word was: ' + correct_word)         # Informs user that they have won
             sys.exit()          # Exists the program
         else:   # When the counter reaches 6, last stage of hangman
-            print(self.hang_list[6])    # Prints the lat stage of hangman
-            print('Sorry you loose, the correct word was: ' + correct_word)    # Shows the correct word
+            self.hang_display(wrong=max_wrong)      # Prints the last stage of hangman
+            print('Sorry you lose, the correct word was: ' + correct_word)    # Shows the correct word
             sys.exit()          # Exists the program
 
 

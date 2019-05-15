@@ -1,12 +1,12 @@
 # hangman_ash
-### Game description: 
+###Game description: 
 This is a program runs the hangman game from command prompt. 
 Program chooses a random word from a text stored locally, if file not 
 found locally it downloads it from web into a specific directory. 
 Program then randomly selected a word which is greater in size then 
 the minimum value users enters to start the program.
-##### Then the game begins...
-#### To start the game:
+#####Then the game begins...
+####To start the game:
 <ol>
 <li>First open command line
 <li>Go to the directory where program is located
@@ -46,7 +46,7 @@ Sorry you loose, the correct word was: JUTTYING
 ```
 
 
-### Code description 
+###Code description 
 This program has 5 methods:
 <ol>
 <li><b>__init__(self, min_limit)</b>: Initializes the object and taking minimum word limit as argument.
@@ -56,13 +56,13 @@ This program has 5 methods:
 <li><b>main()</b>: Driver function that calls the initializes the class.
 
 
-#### Code Inputs
+####Code Inputs
 The program takes in:
 <ol>
 <li> A string character 
 </ol>
 
-#### Code Outputs
+####Code Outputs
 The program outputs:
 <ol>
 <li> Error message if string input fails validation
